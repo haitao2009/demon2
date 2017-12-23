@@ -242,6 +242,7 @@
 			<version>0.3.1</version>
 		</dependency>
 	</dependencies>
+	<!-- spring data jpa 数据库持久层 -->
 
 	<build>
 		<pluginManagement>
@@ -260,5 +261,7 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+
+
 
 </project>
