@@ -103,49 +103,56 @@
 						});
 					}
 				});
-				
+
 				// 页面加载后 右下角 弹出窗口
-			window.setTimeout(function() {
-				$.messager.show({
-					title: "消息提示",
-					msg: '欢迎登录，超级管理员！ <a href="javascript:void" onclick="top.showAbout();">联系管理员</a>',
-					timeout: 2000
+				window.setTimeout(function() {
+					$.messager.show({
+						title: "消息提示",
+						msg: '欢迎登录，超级管理员！ <a href="javascript:void" onclick="top.showAbout();">联系管理员</a>',
+						timeout: 2000
+					});
+				}, 500);
+
+				//为每个菜单绑定点击事件
+				//关闭选中的标签
+				$("#closeCurrent").click(function() {
+					alert(123456)
+					//获取选中的标签索引
+					var tab = $('#mytabs').tabs('getSelected');
+					var index = $('#mytabs').tabs('getTabIndex', tab);
+					$("#mytabs").tabs("close", index);
 				});
-			}, 500);
 
-			//为每个菜单绑定点击事件
-			//关闭选中的标签
-			$("#closeCurrent").click(function() {
-				//获取选中的标签索引
-				var tab = $('#mytabs').tabs('getSelected');
-				var index = $('#mytabs').tabs('getTabIndex', tab);
-				$("#mytabs").tabs("close", index);
-			});
-			
-			//关闭选中标签之外的标签
-			$("#closeOthers").click(function() {
-				alert(789)
-				//获取所有标签
-				var tabs = $("#mytabs").tabs("tabs");
-				var length = tabs.length;
-				//获取选中标签的索引
-				var tab = $('#mytabs').tabs('getSelected');
-				var index = $('#mytabs').tabs('getTabIndex', tab);
-
-				//关闭所有标签
-				$("#closeAll").click(function() {
+				//关闭选中标签之外的标签
+				$("#closeOthers").click(function() {
+					alert(789)
+					//获取所有标签
 					var tabs = $("#mytabs").tabs("tabs");
 					var length = tabs.length;
-					for(var i = 0; i < length; i++) {
-						$("#mytabs").tabs("close", 0);
-					}
+					//获取选中标签的索引
+					var tab = $('#mytabs').tabs('getSelected');
+					var index = $('#mytabs').tabs('getTabIndex', tab);
+
+					//关闭所有标签
+					$("#closeAll").click(function() {
+						var tabs = $("#mytabs").tabs("tabs");
+						var length = tabs.length;
+						for(var i = 0; i < length; i++) {
+							$("#mytabs").tabs("close", 0);
+						}
+					});
+
 				});
-
 			});
 
+			//弹出窗口的js代码
+			$(function() {
+				$("#openBtn").click(function() {
+					$("#mywindow").window('open');
+				});
 			});
-			
 		</script>
+
 	</head>
 
 	<body class="easyui-layout">
@@ -163,7 +170,9 @@
 		<div data-options="region:'center'">
 			<!-- 选项卡面板-->
 			<div id="mytabs" class="easyui-tabs" data-options="fit:true">
-				<div data-options="title:'选项卡面板一',closable:true">选项卡面板一</div>
+				<div data-options="title:'选项卡面板一',closable:true">
+					<input type="button" value="打开" id="openBtn" />
+				</div>
 			</div>
 		</div>
 		<div data-options="region:'east'" style="width: 80px;">消息新闻</div>
@@ -180,7 +189,20 @@
 			<div id="closeAll" name="closeAll" data-options="iconCls:'icon-cancel'">关闭所有</div>
 		</div>
 
-		
+		<!--
+	作者：offline
+	时间：2017-12-23
+	描述：窗口模块
+-->
+		<!--<div id="mywindow" class="easyui-window" data-opentions="title:'标题窗口',
+		collapsible:false,modal:true,closed:true"
+		style="width:200px;height: 200px;">
+		窗口内容
+	</div>-->
+
+		<div id="mywindow" class="easyui-window" title="My Window" style="width:600px;height:400px" data-options="iconCls:'icon-save',modal:true,closed:true">
+			窗口内容
+		</div>
 
 	</body>
 

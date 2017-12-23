@@ -34,6 +34,17 @@
 					idField : 'id',
 					columns : columns
 				});
+				
+				//对收派标准的sava按钮添加点击事件
+				$("#save").click(function(){
+					//判断表单是否填写完整 通过校验
+					if($("#standardForm").form('validate')){
+						//填写完整 通过验证
+						$("#standardForm").submit();
+					}else{
+						$.messager.alert("警告","请将表中数据填写完整再提交","warning");
+					}
+				});
 			});	
 			
 			//工具栏
@@ -42,7 +53,7 @@
 				text : '增加',
 				iconCls : 'icon-add',
 				handler : function(){
-					alert('增加');
+					$("#standardWindow").window('open');
 				}
 			}, {
 				id : 'button-edit',
@@ -106,6 +117,11 @@
 			<table id="grid"></table>
 		</div>
 		
+		<!--
+        	作者：offline
+        	时间：2017-12-23
+        	描述：收派标准弹出页面
+        -->
 		<div class="easyui-window" title="对收派标准进行添加或者修改" id="standardWindow" collapsible="false" minimizable="false" maximizable="false" modal="true" closed="true" style="width:600px;top:50px;left:200px">
 			<div region="north" style="height:31px;overflow:hidden;" split="false" border="false">
 				<div class="datagrid-toolbar">
@@ -115,7 +131,7 @@
 
 			<div region="center" style="overflow:auto;padding:5px;" border="false">
 				
-				<form>
+				<form id="standardForm" action="../../standard_save.action" method="post">
 					<table class="table-edit" width="80%" align="center">
 						<tr class="title">
 							<td colspan="2">收派标准信息
