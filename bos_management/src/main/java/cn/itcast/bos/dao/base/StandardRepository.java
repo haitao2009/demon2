@@ -15,6 +15,4 @@ import java.util.List;
 public interface StandardRepository extends JpaRepository<Standard,Integer>{
 
 
-
-
 }

@@ -1,4 +1,5 @@
 package cn.itcast.bos.domain.base;
+import org.apache.struts2.json.annotations.JSON;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import static org.springframework.data.repository.init.ResourceReader.Type.JSON;
 
 /**
  * @description:快递员
@@ -135,6 +138,7 @@ public class Courier {
 		this.vehicleNum = vehicleNum;
 	}
 
+	@JSON(serialize = false)
 	public Set<FixedArea> getFixedAreas() {
 		return fixedAreas;
 	}

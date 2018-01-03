@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title>管理分区</title>
@@ -14,185 +15,268 @@
 		<script type="text/javascript" src="../../js/easyui/ext/jquery.portal.js"></script>
 		<script type="text/javascript" src="../../js/easyui/ext/jquery.cookie.js"></script>
 		<script src="../../js/easyui/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
+		<script src="../../js/ocupload/jquery.ocupload-1.1.2.js" type="text/javascript"></script>
 		<script type="text/javascript">
-			function doAdd(){
+			<!--将表单序列化json对象-->
+			$.fn.serializeJson = function() {
+				var serializeObj = {};
+				5
+				var array = this.serializeArray();
+				var str = this.serialize();
+				$(array).each(function() {
+					if(serializeObj[this.name]) {
+						if($.isArray(serializeObj[this.name])) {
+							serializeObj[this.name].push(this.value);
+						} else {
+							serializeObj[this.name] = [serializeObj[this.name], this.value];
+						}
+					} else {
+						serializeObj[this.name] = this.value;
+					}
+				});
+				return serializeObj;
+			};
+
+			function doAdd() {
 				$('#addWindow').window("open");
 			}
-			
-			function doEdit(){
-				alert("修改...");
+
+			function doEdit() {
+				//获取当前行
+				var rows = $("#grid").datagrid("getSelections");
+				//判断是否多选或者没选
+				if(rows.length != 1) {
+					$.messager.alert("警告", "请选中一行进行修改操作", "warning");
+					return;
+				} else {
+					//已选中一行 进行表单回显
+					var row = rows[0];
+					$("#subareaform").form('load', row);
+					//区域下拉菜单回显
+					$("#area").combobox('setValue', row.area.id);
+					//定区下拉菜单回显
+					$("#fixarea").combobox('setValue', row.fixedArea.id);
+					$("#addWindow").window('open');
+				}
 			}
-			
-			function doDelete(){
+
+			function doDelete() {
 				alert("删除...");
 			}
-			
-			function doSearch(){
+
+			function doSearch() {
 				$('#searchWindow').window("open");
 			}
-			
-			function doExport(){
+
+			function doExport() {
 				alert("导出");
 			}
-			
-			function doImport(){
-				alert("导入");
+
+			function doImport() {
+				alert("导入")
 			}
-			
+
 			//工具栏
-			var toolbar = [ {
-				id : 'button-search',	
-				text : '查询',
-				iconCls : 'icon-search',
-				handler : doSearch
+			var toolbar = [{
+				id: 'button-search',
+				text: '查询',
+				iconCls: 'icon-search',
+				handler: doSearch
 			}, {
-				id : 'button-add',
-				text : '增加',
-				iconCls : 'icon-add',
-				handler : doAdd
+				id: 'button-add',
+				text: '增加',
+				iconCls: 'icon-add',
+				handler: doAdd
 			}, {
-				id : 'button-edit',	
-				text : '修改',
-				iconCls : 'icon-edit',
-				handler : doEdit
-			},{
-				id : 'button-delete',
-				text : '删除',
-				iconCls : 'icon-cancel',
-				handler : doDelete
-			},{
-				id : 'button-import',
-				text : '导入',
-				iconCls : 'icon-redo',
-				handler : doImport
-			},{
-				id : 'button-export',
-				text : '导出',
-				iconCls : 'icon-undo',
-				handler : doExport
+				id: 'button-edit',
+				text: '修改',
+				iconCls: 'icon-edit',
+				handler: doEdit
+			}, {
+				id: 'button-delete',
+				text: '删除',
+				iconCls: 'icon-cancel',
+				handler: doDelete
+			}, {
+				id: 'button-import',
+				text: '导入',
+				iconCls: 'icon-redo',
+			}, {
+				id: 'button-export',
+				text: '导出',
+				iconCls: 'icon-undo',
+				handler: doExport
 			}];
 			// 定义列
-			var columns = [ [ {
-				field : 'id',
-				checkbox : true,
-			}, {
-				field : 'showid',
-				title : '分拣编号',
-				width : 120,
-				align : 'center',
-				formatter : function(data,row ,index){
-					return row.id;
-				}
-			},{
-				field : 'area.province',
-				title : '省',
-				width : 120,
-				align : 'center',
-				formatter : function(data,row ,index){
-					if(row.area != null ){
-						return row.area.province;
+			var columns = [
+				[{
+					field: 'id',
+					checkbox: true,
+				}, {
+					field: 'showid',
+					title: '分拣编号',
+					width: 120,
+					align: 'center',
+					formatter: function(data, row, index) {
+						return row.id;
 					}
-					return "" ;
-				}
-			}, {
-				field : 'area.city',
-				title : '市',
-				width : 120,
-				align : 'center',
-				formatter : function(data,row ,index){
-					if(row.area != null ){
-						return row.area.city;
+				}, {
+					field: 'area.province',
+					title: '省',
+					width: 120,
+					align: 'center',
+					formatter: function(data, row, index) {
+						if(row.area != null) {
+							return row.area.province;
+						}
+						return "";
 					}
-					return "" ;
-				}
-			}, {
-				field : 'area.district',
-				title : '区',
-				width : 120,
-				align : 'center',
-				formatter : function(data,row ,index){
-					if(row.area != null ){
-						return row.area.district;
+				}, {
+					field: 'area.city',
+					title: '市',
+					width: 120,
+					align: 'center',
+					formatter: function(data, row, index) {
+						if(row.area != null) {
+							return row.area.city;
+						}
+						return "";
 					}
-					return "" ;
-				}
-			}, {
-				field : 'keyWords',
-				title : '关键字',
-				width : 120,
-				align : 'center'
-			}, {
-				field : 'startnum',
-				title : '起始号',
-				width : 100,
-				align : 'center'
-			}, {
-				field : 'endnum',
-				title : '终止号',
-				width : 100,
-				align : 'center'
-			} , {
-				field : 'single',
-				title : '单双号',
-				width : 100,
-				align : 'center'
-			} , {
-				field : 'assistKeyWords',
-				title : '辅助关键字',
-				width : 100,
-				align : 'center'
-			} ] ];
-			
-			$(function(){
+				}, {
+					field: 'area.district',
+					title: '区',
+					width: 120,
+					align: 'center',
+					formatter: function(data, row, index) {
+						if(row.area != null) {
+							return row.area.district;
+						}
+						return "";
+					}
+				}, {
+					field: 'keyWords',
+					title: '关键字',
+					width: 120,
+					align: 'center'
+				}, {
+					field: 'startNum',
+					title: '起始号',
+					width: 100,
+					align: 'center'
+				}, {
+					field: 'endNum',
+					title: '终止号',
+					width: 100,
+					align: 'center'
+				}, {
+					field: 'single',
+					title: '单双号',
+					width: 100,
+					align: 'center'
+				}, {
+					field: 'assistKeyWords',
+					title: '辅助关键字',
+					width: 100,
+					align: 'center'
+				}]
+			];
+
+			$(function() {
 				// 先将body隐藏，再显示，不会出现页面刷新效果
-				$("body").css({visibility:"visible"});
-				
-				// 分区管理数据表格
-				$('#grid').datagrid( {
-					iconCls : 'icon-forward',
-					fit : true,
-					border : true,
-					rownumbers : true,
-					striped : true,
-					pageList: [30,50,100],
-					pagination : true,
-					toolbar : toolbar,
-					url : "../../data/sub_area.json",
-					idField : 'id',
-					columns : columns,
-					onDblClickRow : doDblClickRow
+				$("body").css({
+					visibility: "visible"
 				});
-				
+
+				// 分区管理数据表格
+				$('#grid').datagrid({
+					iconCls: 'icon-forward',
+					fit: true,
+					border: true,
+					rownumbers: true,
+					striped: true,
+					pageList: [30, 50, 100],
+					pagination: true,
+					toolbar: toolbar,
+					url: "../../subarea_pageQuery.action",
+					idField: 'id',
+					columns: columns,
+					onDblClickRow: doDblClickRow
+				});
+
 				// 添加、修改分区
 				$('#addWindow').window({
-			        title: '添加修改分区',
-			        width: 600,
-			        modal: true,
-			        shadow: true,
-			        closed: true,
-			        height: 400,
-			        resizable:false
-			    });
-				
+					title: '添加修改分区',
+					width: 600,
+					modal: true,
+					shadow: true,
+					closed: true,
+					height: 400,
+					resizable: false
+				});
+
 				// 查询分区
 				$('#searchWindow').window({
-			        title: '查询分区',
-			        width: 400,
-			        modal: true,
-			        shadow: true,
-			        closed: true,
-			        height: 400,
-			        resizable:false
-			    });
-				$("#btn").click(function(){
-					alert("执行查询...");
+					title: '查询分区',
+					width: 400,
+					modal: true,
+					shadow: true,
+					closed: true,
+					height: 400,
+					resizable: false
 				});
-				
+
+				//为查询按钮添加点击事件
+				$("#btn").click(function() {
+					var params = $("#searchForm").serializeJson();
+					//将json数据绑定在datagrid上,完成带有参数的请求
+					$("#grid").datagrid("load", params);
+					//关闭窗口
+					$("#searchWindow").window('close');
+				});
+
+				//为添加区域的保存按钮添加点击事件
+				$("#save").click(function() {
+					//判断表单是否满足校验
+					if($("#subareaform").form("validate")) {
+						$("#subareaform").submit();
+					} else {
+						$.messager.alert("警告", "请将表单填写完整!!!", "warning")
+					}
+				});
+
+				//为倒入按钮添加一键上传效果
+				$("#button-import").upload({
+					// 默认name为file 
+					action: '../../subArea_batchImport.action',
+					onSelect: function() {
+						// 选中文件后，关闭自动提交 
+						this.autoSubmit = false;
+						// 判定文件格式 ，以.xls 或者 .xlsx 结尾 
+						var filename = this.filename();
+						var regex = /^.*\.(xls|xlsx)$/;
+						if(regex.test(filename)) {
+							// 满足
+							this.submit();
+						} else {
+							$.messager.alert("警告", "只能上传.xls或.xlsx结尾的文件！", "warning");
+						}
+					},
+					onComplete: function(response) {
+						//alert("文件上传成功！");
+						alert(response);
+					}
+				});
 			});
-		
-			function doDblClickRow(){
+
+			function doDblClickRow() {
 				alert("双击表格数据...");
 			}
+			
+			//三级联动事件加载
+			function province_select(){
+				alert(123);
+			};
+			
 		</script>
 	</head>
 
@@ -209,7 +293,7 @@
 			</div>
 
 			<div style="overflow:auto;padding:5px;" border="false">
-				<form>
+				<form id="subareaform" action="../../subarea_save.action" method="post">
 					<table class="table-edit" width="80%" align="center">
 						<tr class="title">
 							<td colspan="2">分区信息</td>
@@ -222,14 +306,20 @@
 						</tr>
 						<tr>
 							<td>选择区域</td>
+							<!--
+                            	作者：offline
+                            	时间：2017-12-29
+                            	描述：省市区三级联动
+                            -->
 							<td>
-								<input class="easyui-combobox" name="area.id" data-options="valueField:'id',textField:'name',url:'../../data/area.json'" />
+								<input class="easyui-combobox" id="area" name="area.id" data-options="valueField:'id',textField:'info',url:'../../area_findAll.action'" edit-->able="false" />
+
 							</td>
 						</tr>
 						<tr>
 							<td>选择定区</td>
 							<td>
-								<input class="easyui-combobox" name="fixedArea.id" data-options="valueField:'id',textField:'name',url:'../../data/fixedArea.json'" />
+								<input class="easyui-combobox" id="fixarea" name="fixedArea.id" data-options="valueField:'id',textField:'company',url:'../../fixarea_findAll.action'" editable="false" />
 							</td>
 						</tr>
 						<tr>
@@ -241,13 +331,13 @@
 						<tr>
 							<td>起始号</td>
 							<td>
-								<input type="text" name="startnum" class="easyui-validatebox" required="true" />
+								<input type="text" name="startNum" class="easyui-validatebox" required="true" />
 							</td>
 						</tr>
 						<tr>
 							<td>终止号</td>
 							<td>
-								<input type="text" name="endnum" class="easyui-validatebox" required="true" />
+								<input type="text" name="endNum" class="easyui-validatebox" required="true" />
 							</td>
 						</tr>
 						<tr>
@@ -273,7 +363,7 @@
 		<!-- 查询分区 -->
 		<div class="easyui-window" title="查询分区窗口" id="searchWindow" collapsible="false" minimizable="false" maximizable="false" style="top:20px;left:200px">
 			<div style="overflow:auto;padding:5px;" border="false">
-				<form>
+				<form id="searchForm">
 					<table class="table-edit" width="80%" align="center">
 						<tr class="title">
 							<td colspan="2">查询条件</td>
@@ -281,19 +371,19 @@
 						<tr>
 							<td>省</td>
 							<td>
-								<input type="text" name="province" class="easyui-validatebox" required="true" />
+								<input type="text" name="area.province" class="easyui-validatebox" required="true" />
 							</td>
 						</tr>
 						<tr>
 							<td>市</td>
 							<td>
-								<input type="text" name="city" class="easyui-validatebox" required="true" />
+								<input type="text" name="area.city" class="easyui-validatebox" required="true" />
 							</td>
 						</tr>
 						<tr>
 							<td>区（县）</td>
 							<td>
-								<input type="text" name="district" class="easyui-validatebox" required="true" />
+								<input type="text" name="area.district" class="easyui-validatebox" required="true" />
 							</td>
 						</tr>
 						<tr>
@@ -309,7 +399,9 @@
 							</td>
 						</tr>
 						<tr>
-							<td colspan="2"><a id="btn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a> </td>
+							<td colspan="2">
+								<a id="btn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
+							</td>
 						</tr>
 					</table>
 				</form>

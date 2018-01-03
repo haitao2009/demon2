@@ -22,6 +22,7 @@
 		<cxf.version>3.0.1</cxf.version>
 		<servlet.version>2.5</servlet.version>
 		<junit.version>4.11</junit.version>
+		<poi.version>3.11</poi.version>
 	</properties>
 
 	<dependencies>
@@ -75,6 +76,13 @@
 			<version>${spring.version}</version>
 		</dependency>
 
+		<!--导入拼音4J-->
+		<dependency>
+			<groupId>com.belerweb</groupId>
+			<artifactId>pinyin4j</artifactId>
+			<version>2.5.0</version>
+		</dependency>
+
 		<!-- spring data jpa 数据库持久层 -->
 		<dependency>
 			<groupId>org.springframework.data</groupId>
@@ -104,6 +112,30 @@
 			<groupId>org.apache.struts</groupId>
 			<artifactId>struts2-convention-plugin</artifactId>
 			<version>${struts2.version}</version>
+		</dependency>
+
+		<!--导入json插件坐标-->
+		<dependency>
+			<groupId>org.apache.struts</groupId>
+			<artifactId>struts2-json-plugin</artifactId>
+			<version>${struts2.version}</version>
+		</dependency>
+
+		<!-- Excel解析工具类  -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>${poi.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>${poi.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml-schemas</artifactId>
+			<version>${poi.version}</version>
 		</dependency>
 
 		<!-- hibernate 框架 -->
@@ -157,23 +189,6 @@
 			<groupId>com.oracle</groupId>
 			<artifactId>ojdbc6</artifactId>
 			<version>11.2.0.1.0</version>
-		</dependency>
-
-		<!-- Excel解析工具类  -->
-		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi</artifactId>
-			<version>${poi.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi-ooxml</artifactId>
-			<version>${poi.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi-ooxml-schemas</artifactId>
-			<version>${poi.version}</version>
 		</dependency>
 
 		<!-- Servlet、JSP -->
@@ -243,7 +258,6 @@
 		</dependency>
 	</dependencies>
 	<!-- spring data jpa 数据库持久层 -->
-
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -261,7 +275,4 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-
-
-
 </project>

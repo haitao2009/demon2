@@ -1,13 +1,12 @@
 package cn.itcast.bos.domain.base;
 
+import org.apache.struts2.json.annotations.JSON;
+import org.springframework.beans.factory.annotation.Value;
+
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 /**
@@ -17,94 +16,111 @@ import javax.persistence.Table;
 @Table(name = "T_AREA")
 public class Area {
 
-	@Id
-	@Column(name = "C_ID")
-	private String id;
-	@Column(name = "C_PROVINCE")
-	private String province; // 省
-	@Column(name = "C_CITY")
-	private String city; // 城市
-	@Column(name = "C_DISTRICT")
-	private String district; // 区域
-	@Column(name = "C_POSTCODE")
-	private String postcode; // 邮编
-	@Column(name = "C_CITYCODE")
-	private String citycode; // 城市编码
-	@Column(name = "C_SHORTCODE")
-	private String shortcode; // 简码
+    @Id
+    @Column(name = "C_ID")
+    private String id;
+    @Column(name = "C_PROVINCE")
+    private String province; // 省
+    @Column(name = "C_CITY")
+    private String city; // 城市
+    @Column(name = "C_DISTRICT")
+    private String district; // 区域
+    @Column(name = "C_POSTCODE")
+    private String postcode; // 邮编
+    @Column(name = "C_CITYCODE")
+    private String citycode; // 城市编码
+    @Column(name = "C_SHORTCODE")
+    private String shortcode; // 简码
 
-	@OneToMany(mappedBy = "area")
-	private Set<SubArea> subareas = new HashSet<SubArea>();
+    @OneToMany(mappedBy = "area")
+    private Set<SubArea> subareas = new HashSet<SubArea>();
 
-	public String getId() {
-		return id;
-	}
+    public Area(String id, String province, String city, String district, String postcode) {
+        this.id = id;
+        this.province = province;
+        this.city = city;
+        this.district = district;
+        this.postcode = postcode;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public Area() {
 
-	public String getProvince() {
-		return province;
-	}
+    }
 
-	public void setProvince(String province) {
-		this.province = province;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public String getCity() {
-		return city;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setCity(String city) {
-		this.city = city;
-	}
+    public String getProvince() {
+        return province;
+    }
 
-	public String getDistrict() {
-		return district;
-	}
+    public void setProvince(String province) {
+        this.province = province;
+    }
 
-	public void setDistrict(String district) {
-		this.district = district;
-	}
+    public String getCity() {
+        return city;
+    }
 
-	public String getPostcode() {
-		return postcode;
-	}
+    public void setCity(String city) {
+        this.city = city;
+    }
 
-	public void setPostcode(String postcode) {
-		this.postcode = postcode;
-	}
+    public String getDistrict() {
+        return district;
+    }
 
-	public String getCitycode() {
-		return citycode;
-	}
+    public void setDistrict(String district) {
+        this.district = district;
+    }
 
-	public void setCitycode(String citycode) {
-		this.citycode = citycode;
-	}
+    public String getPostcode() {
+        return postcode;
+    }
 
-	public String getShortcode() {
-		return shortcode;
-	}
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
+    }
 
-	public void setShortcode(String shortcode) {
-		this.shortcode = shortcode;
-	}
+    public String getCitycode() {
+        return citycode;
+    }
 
-	public Set<SubArea> getSubareas() {
-		return subareas;
-	}
+    public void setCitycode(String citycode) {
+        this.citycode = citycode;
+    }
 
-	public void setSubareas(Set<SubArea> subareas) {
-		this.subareas = subareas;
-	}
+    public String getShortcode() {
+        return shortcode;
+    }
 
-	@Override
-	public String toString() {
-		return "Area [id=" + id + ", province=" + province + ", city=" + city
-				+ ", district=" + district + ", postcode=" + postcode
-				+ ", citycode=" + citycode + ", shortcode=" + shortcode + "]";
-	}
+    public void setShortcode(String shortcode) {
+        this.shortcode = shortcode;
+    }
 
+    @JSON(serialize = false)
+    public Set<SubArea> getSubareas() {
+        return subareas;
+    }
+
+    public void setSubareas(Set<SubArea> subareas) {
+        this.subareas = subareas;
+    }
+
+    @Override
+    public String toString() {
+        return "Area [id=" + id + ", province=" + province + ", city=" + city
+                + ", district=" + district + ", postcode=" + postcode
+                + ", citycode=" + citycode + ", shortcode=" + shortcode + "]";
+    }
+
+    @Transient
+    public String getInfo() {
+        return province + city + district;
+    }
 }
